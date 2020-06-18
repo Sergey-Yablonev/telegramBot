@@ -52,11 +52,11 @@ def welcome(message):
 		keyboard.add(callback_button_yes)
 		keyboard.add(callback_button_no)
 		if roleName == 'Customer':
-			bot.send_message(message.chat.id, "1Здравствуй "+ userName +"(роль " + roleName+ ", проект " + projectName + "), хочешь оставить новые сообщения для разработчиков своего проекта?", reply_markup=keyboard)
+			bot.send_message(message.chat.id, "Здравствуй "+ userName +"(роль " + roleName+ ", проект " + projectName + "), хочешь оставить новые сообщения для разработчиков своего проекта?", reply_markup=keyboard)
 		elif roleName == 'Developer':
-			bot.send_message(message.chat.id, "1Здравствуй "+ userName +"(роль " + roleName+ ", проект " + projectName + "), тебе показать новые сообщения, оставленные для твоего проекта, если они есть?", reply_markup=keyboard)
+			bot.send_message(message.chat.id, "Здравствуй "+ userName +"(роль " + roleName+ ", проект " + projectName + "), тебе показать новые сообщения, оставленные для твоего проекта, если они есть?", reply_markup=keyboard)
 		else:
-			bot.send_message(message.chat.id, "1Здравствуй "+ userName +"(роль " + roleName+ "), тебе показать новые сообщения?", reply_markup=keyboard)
+			bot.send_message(message.chat.id, "Здравствуй "+ userName +"(роль " + roleName+ "), тебе показать новые сообщения?", reply_markup=keyboard)
 	else:
 		bot.send_message(message.chat.id, "Извините, но вас нет в базе данных, вам доступ запрещен")
 
@@ -191,32 +191,17 @@ def setUserData(results):
 
 
 
+@server.route('/' + tokenBot.TOKEN, methods=['POST'])
+def getMessage():
+    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+    return "!", 200
+
+@server.route("/")
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url='https://test-new-new.herokuapp.com/' + tokenBot.TOKEN)
+    return "!", 200
+
 if __name__ == '__main__':
-    bot.polling()
-
-
-
-	# message.text - текст который ввел
-
-	############# поггули че  делает функция split()
-	#temp = message.text.split("/",1)
-	#if len(temp) > 1 :
-	#	login = temp[0]
-	#	password = temp[1]
-		# Делаем SELECT запрос к базе данных, используя обычный SQL-синтаксис
-	#	cursor.execute(
-	#		"SELECT Name FROM Role WHERE RoleId = (SELECT RoleId FROM User WHERE Login = '" + login + "' AND Password = '" + password + "')")
-		# Получаем результат сделанного запроса
-	#	results = cursor.fetchall()
-	#	if len(results) != 0:
-	#			keyboard = types.InlineKeyboardMarkup()
-	#			#Добавляем колбэк-кнопку
-	#			callback_button_yes = types.InlineKeyboardButton(text="Да", callback_data="yes-"+results[0][0])
-	#			callback_button_no = types.InlineKeyboardButton(text="Нет", callback_data="no-"+results[0][0])
-	#			keyboard.add(callback_button_yes)
-	#			keyboard.add(callback_button_no)
-	#			bot.send_message(message.chat.id, "Здравствуй " + results[0][0] + ", тебе показать новые вопросы?", reply_markup=keyboard)
-	#	else:
-	#		bot.send_message(message.chat.id, "Ты ввел некорректные данные, введи еще раз")
-	#else:
-#	bot.send_message(message.chat.id, "Ты ввел некорректные данные, введи еще раз")
+	server.debug = True
+	server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
