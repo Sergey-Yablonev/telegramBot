@@ -19,6 +19,7 @@ answer_results = [] # список сообщений
 current_view_answer_index = -1 # переменная для запоминания индекса в answer_results
 
 TOKEN = "915222841:AAH7C7xrsDp6vVg17c5H7OCKi9ftDFNVVEY"
+APP_NAME = 'stormy-depths-51195'
 bot = telebot.TeleBot(TOKEN);
 
 server = Flask(__name__)
