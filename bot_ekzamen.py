@@ -2,6 +2,8 @@ import telebot;
 from telebot import types
 import requests
 import json
+import os
+from flask import Flask, request
 # Импортируем библиотеку, соответствующую типу нашей базы данных
 import sqlite3
 
@@ -18,6 +20,8 @@ current_view_answer_index = -1 # переменная для запоминан�
 
 TOKEN = "915222841:AAH7C7xrsDp6vVg17c5H7OCKi9ftDFNVVEY"
 bot = telebot.TeleBot(TOKEN);
+
+server = Flask(__name__)
 
 # Создаем соединение с нашей базой данных
 # В нашем примере у нас это просто файл базы
@@ -191,7 +195,7 @@ def setUserData(results):
 
 
 
-@server.route('/' + tokenBot.TOKEN, methods=['POST'])
+@server.route('/' + TOKEN, methods=['POST'])
 def getMessage():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
     return "!", 200
@@ -199,7 +203,7 @@ def getMessage():
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url='https://test-new-new.herokuapp.com/' + tokenBot.TOKEN)
+    bot.set_webhook(url='https://test-new-new.herokuapp.com/' + TOKEN)
     return "!", 200
 
 if __name__ == '__main__':
